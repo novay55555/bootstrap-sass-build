@@ -1,0 +1,23 @@
+{
+  "name": "bootstarp-mine",
+  "version": "0.0.0",
+  "description": "build bootstarp for myself",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^1.8.8",
+    "gulp-ruby-sass": "^2.1.1",
+    "gulp-sourcemaps": "^2.4.0"
+  }
+}
