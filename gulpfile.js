@@ -4,25 +4,19 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const autoprefixer = require('gulp-autoprefixer');
 const header = require('gulp-header');
+const cleancss = require('gulp-clean-css');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
 
 const config = require('./config');
 
-gulp.task('default', ['sass-build', 'bootstrap-js']);
+gulp.task('default', ['bootstarp-css', 'bootstrap-js']);
 
-gulp.task('sass-build', () =>
+gulp.task('bootstarp-css', () =>
   sass('./src/test.scss', { sourcemap: true })
   .on('error', sass.logError)
   .pipe(autoprefixer({
-    browsers: [
-      "Android 2.3",
-      "Android >= 4",
-      "Chrome >= 20",
-      "Firefox >= 24",
-      "Explorer >= 8",
-      "iOS >= 6",
-      "Opera >= 12",
-      "Safari >= 6"
-    ],
+    browsers: config.browsers,
     cascade: false
   }))
   .pipe(sourcemaps.write('maps', {
@@ -30,18 +24,25 @@ gulp.task('sass-build', () =>
     sourceRoot: 'src'
   }))
   .pipe(gulp.dest(config.path.dist))
+  .pipe(cleancss())
+  .pipe(rename('test.min.css'))
+  .pipe(gulp.dest(config.path.dist))
 );
 
 gulp.task('bootstrap-js', () => {
-  let banner = ['/**',
+  const banner = ['/**',
     ' * <%= pkg.version %>',
     ' * <%= pkg.description %>',
     ' * <%= pkg.license %>',
     ' */',
     '\n'
   ].join('\n');
-  gulp.src(['./src/jquery-checkout.js', './assets/javascripts/bootstrap/*.js'])
+  return gulp.src(['./src/jquery-checkout.js', './assets/javascripts/bootstrap/*.js'])
     .pipe(concat('test.js'))
     .pipe(header(banner, { pkg: config.header.bootstarp }))
+    .pipe(gulp.dest(config.path.dist))
+    .pipe(uglify())
+    .pipe(header(banner, { pkg: config.header.bootstarp }))
+    .pipe(rename('test.min.js'))
     .pipe(gulp.dest(config.path.dist))
 });
